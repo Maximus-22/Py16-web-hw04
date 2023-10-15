@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog-blog page</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/style.css" />    
+  </head>
+  <body>    
+    <header>
+      <nav
+        class="navbar navbar-expand navbar-dark bg-dark"
+        aria-label="Second navbar example"
+      >
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="/logo.png" alt="logo" />
+          </a>
+          <div class="collapse navbar-collapse" id="navbarsExample02">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+              </li>             
+              <li class="nav-item">
+                <a class="nav-link" href="/message">Send message</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/blog">Blog-blog</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main role="main" class="container">
+      <!-- це з методу [jinja.render] те що йшло у кортежi можна показати клiенту без jsnod -->
+      {% if message %}
+        <h3>{{ message }}</h3>
+      {% endif %}
+      <div class="row">
+        <div class="col-md-8 blog-main">
+          <!-- block blog-post -->
+          {% for blog in blogs %}
+          <div class="blog-post">
+            <h2 class="blog-post-title">{{ blog.title }}</h2>
+            <p class="blog-post-meta">{{ blog.date }} by <a href="#">{{ blog.author }}</a></p>
+            <p>
+              {{ blog.text }}
+            </p>
+          </div>
+          {% endfor %}
+          <!-- end block blog-post -->
+        </div>
+        <!-- /.blog-main -->
+      </div>
+    </main>
+  </body>
+</html>

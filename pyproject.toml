@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "py16-web-hw04"
+version = "0.1.0"
+description = "HTML-Server + socket (UDP-direct)"
+authors = ["Maximus-22 <maksim.melnichenko@nservice.com.ua>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+jinja2 = "^3.1.2"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
