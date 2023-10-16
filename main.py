@@ -9,10 +9,10 @@ from jinja2 import Environment, FileSystemLoader
 BASE_DIR = Path()
 BUFFER_SIZE = 1024
 DATA_JSON = "data/data.json"
-HTTP_PORT = 8080
+HTTP_PORT = 3000
 HTTP_HOST = "0.0.0.0"
 SOCKET_HOST = "127.0.0.1"
-SOCKET_PORT = 4000
+SOCKET_PORT = 5000
 
 # оточення для джинджи та iнструмент роботи з файлом
 jinja = Environment(loader=FileSystemLoader('templates'))
@@ -22,7 +22,7 @@ class GoitFramework(BaseHTTPRequestHandler):
 
     def do_GET(self):
         route = urllib.parse.urlparse(self.path)
-        print(route.query)
+        # print(route.query)
         match route.path:
             case '/':
                 self.send_html('index.html')
@@ -119,8 +119,9 @@ def run_socket_server(host, port):
             save_data_from_form(msg)
     except KeyboardInterrupt:
         logging.info("Keyboard interrupt processed correctly.")
-    finally:
         server_socket.close()
+    # finally:
+    #     server_socket.close()
 
 
 def run_http_server(host, port):
@@ -132,8 +133,9 @@ def run_http_server(host, port):
         http_server.serve_forever()
     except KeyboardInterrupt:
         logging.info("Keyboard interrupt processed correctly.")
-    finally:
         http_server.server_close()
+    # finally:
+    #     http_server.server_close()
 
 
 if __name__ == '__main__':

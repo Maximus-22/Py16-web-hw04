@@ -1,0 +1,7 @@
+/__pycache__/
+/.git
+/.gitignore
+/.venv
+/poetry.lock
+/pyproject.toml
+Dockerfile
