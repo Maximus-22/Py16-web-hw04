@@ -1,4 +1,5 @@
-import json, logging, mimetypes, socket, urllib.parse
+import json, logging, mimetypes, os, socket, urllib.parse
+from datetime import datetime
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from threading import Thread
@@ -7,9 +8,10 @@ from jinja2 import Environment, FileSystemLoader
 
 BASE_DIR = Path()
 BUFFER_SIZE = 1024
+DATA_JSON = "data/data.json"
 HTTP_PORT = 8080
-HTTP_HOST = '0.0.0.0'
-SOCKET_HOST = '127.0.0.1'
+HTTP_HOST = "0.0.0.0"
+SOCKET_HOST = "127.0.0.1"
 SOCKET_PORT = 4000
 
 # оточення для джинджи та iнструмент роботи з файлом
@@ -88,10 +90,18 @@ class GoitFramework(BaseHTTPRequestHandler):
 def save_data_from_form(data):
     # unquote_plus() при декодуваннi замiнюэ знаки [+] на пробiли
     parse_data = urllib.parse.unquote_plus(data.decode())
+    existing_data = dict()
     try:
         parse_dict = {key: value for key, value in [el.split('=') for el in parse_data.split('&')]}
-        with open('data/data.json', 'w', encoding='utf-8') as file:
-            json.dump(parse_dict, file, ensure_ascii=False, indent=4)
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        store_dict = { timestamp : parse_dict }
+        if os.path.exists(DATA_JSON):
+            with open (DATA_JSON, 'r', encoding='utf-8') as file_old:
+                existing_data = json.load(file_old)
+        existing_data.update(store_dict)
+        with open (DATA_JSON, 'w', encoding='utf-8') as file_new:
+                # file.seek(0, 2)
+                json.dump(existing_data, file_new, ensure_ascii=False, indent=4)
     except ValueError as err:
         logging.error(err)
     except OSError as err:
@@ -108,7 +118,7 @@ def run_socket_server(host, port):
             logging.info(f"Socket received from {address}:\n-> {msg}")
             save_data_from_form(msg)
     except KeyboardInterrupt:
-        quit(501)
+        logging.info("Keyboard interrupt processed correctly.")
     finally:
         server_socket.close()
 
@@ -121,7 +131,7 @@ def run_http_server(host, port):
         logging.info("Starting http server")
         http_server.serve_forever()
     except KeyboardInterrupt:
-        quit(501)
+        logging.info("Keyboard interrupt processed correctly.")
     finally:
         http_server.server_close()
 
